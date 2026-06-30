@@ -9,21 +9,27 @@ runBtn.addEventListener("click", runAudit);
 
 async function runAudit() {
   const content = $("#content").value.trim();
+  const url = $("#url").value.trim();
   const contentType = $("#content-type").value;
 
-  if (content.length < 10) {
-    showStatus("Ən azı 10 simvol mətn daxil et.");
+  if (!url && content.length < 10) {
+    showStatus("Ən azı 10 simvol mətn və ya link daxil et.");
     return;
   }
 
   setLoading(true);
-  showStatus("5 persona mətni qiymətləndirir... (free-tier model bir az çəkə bilər)");
+  showStatus(
+    url
+      ? "Sayt çəkilir, sonra 5 persona qiymətləndirir..."
+      : "5 persona mətni qiymətləndirir... (free-tier model bir az çəkə bilər)"
+  );
 
   try {
+    const body = url ? { url, content_type: contentType } : { content, content_type: contentType };
     const resp = await fetch(`${API}/audit`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ content, content_type: contentType }),
+      body: JSON.stringify(body),
     });
     if (!resp.ok) {
       const err = await resp.text();

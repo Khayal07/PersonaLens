@@ -21,9 +21,14 @@
 
   <main>
     <section class="composer">
+      <label for="url">Sayt linki (istəyə bağlı)</label>
+      <input id="url" type="url" inputmode="url"
+        placeholder="https://kurs-sayti.az/..." />
+      <p class="hint">Link versən, səhifə mətni avtomatik çəkilib audit olunur.</p>
+
       <label for="content">Marketinq mətni</label>
       <textarea id="content" rows="7"
-        placeholder="Landing page mətni, sosial media postu və ya reklam mətnini bura yapışdır..."></textarea>
+        placeholder="Və ya landing page mətni, sosial media postu, reklam mətnini bura yapışdır..."></textarea>
       <div class="composer-row">
         <select id="content-type" aria-label="Mətn növü">
           <option value="landing">Landing page</option>

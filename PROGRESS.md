@@ -21,6 +21,9 @@ Sessiyalar arası davamlılıq üçün. Hər fazadan sonra yenilənir.
 - İşləyən default model: `openai/gpt-oss-20b:free` (alternativ: `nvidia/nemotron-nano-9b-v2:free`).
 - LLM axını DB-siz canlı test edildi: 5/5 persona + sintez işlədi.
 
+- [x] **Link audit**: `fetcher.py` (BeautifulSoup) — rəsmi sayt URL-dən mətn çəkir.
+      Schema `content` VƏ ya `url`; `Audit.source_url` sütunu; frontend URL inputu.
+
 ## Qalan / növbəti
 - `docker-compose up --build` tam container testi: Docker Desktop işə salınmalıdır
   (test zamanı daemon bağlı idi). Kod, compose config və LLM axını yoxlanıldı.

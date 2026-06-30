@@ -60,7 +60,8 @@ main {
   font-size: 14px;
   color: var(--muted);
 }
-textarea {
+textarea,
+input[type="url"] {
   width: 100%;
   background: var(--bg);
   color: var(--text);
@@ -70,7 +71,14 @@ textarea {
   font: inherit;
   resize: vertical;
 }
-textarea:focus { outline: none; border-color: var(--accent); }
+input[type="url"] { resize: none; }
+textarea:focus,
+input[type="url"]:focus { outline: none; border-color: var(--accent); }
+.hint {
+  margin: 8px 0 18px;
+  font-size: 13px;
+  color: var(--muted);
+}
 
 .composer-row {
   display: flex;

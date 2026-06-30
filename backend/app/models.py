@@ -19,6 +19,7 @@ class Audit(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     content: Mapped[str] = mapped_column(Text, nullable=False)
     content_type: Mapped[str] = mapped_column(String(50), default="general")
+    source_url: Mapped[str | None] = mapped_column(String(2000), nullable=True)
     synthesis: Mapped[dict] = mapped_column(JSON, default=dict)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
 

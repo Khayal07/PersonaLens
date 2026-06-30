@@ -13,6 +13,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from .db import get_db, init_db
+from .fetcher import FetchError, fetch_page_text
 from .models import Audit, PersonaResult
 from .orchestrator import run_personas
 from .schemas import (
@@ -51,13 +52,29 @@ def health() -> dict:
 
 @app.post("/audit", response_model=AuditResponse)
 async def create_audit(req: AuditRequest, db: Session = Depends(get_db)) -> AuditResponse:
+    # 0) Link verilibsə → səhifə mətnini çək, content kimi işlət.
+    source_url = None
+    if req.url and req.url.strip():
+        try:
+            content = await fetch_page_text(req.url)
+        except FetchError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
+        source_url = req.url.strip()
+    else:
+        content = req.content
+
     # 1) 5 persona paralel
-    reactions = await run_personas(req.content)
+    reactions = await run_personas(content)
     # 2) sintez
-    synthesis = await synthesize(req.content, reactions)
+    synthesis = await synthesize(content, reactions)
 
     # 3) DB-yə yaz
-    audit = Audit(content=req.content, content_type=req.content_type, synthesis=synthesis)
+    audit = Audit(
+        content=content,
+        content_type=req.content_type,
+        source_url=source_url,
+        synthesis=synthesis,
+    )
     audit.persona_results = [
         PersonaResult(
             persona_id=r.persona_id,
@@ -74,6 +91,7 @@ async def create_audit(req: AuditRequest, db: Session = Depends(get_db)) -> Audi
         id=audit.id,
         content=audit.content,
         content_type=audit.content_type,
+        source_url=audit.source_url,
         created_at=audit.created_at,
         persona_reactions=[PersonaReactionOut(**r.to_dict()) for r in reactions],
         synthesis=synthesis,
@@ -105,6 +123,7 @@ def get_audit(audit_id: int, db: Session = Depends(get_db)) -> AuditResponse:
         id=audit.id,
         content=audit.content,
         content_type=audit.content_type,
+        source_url=audit.source_url,
         created_at=audit.created_at,
         persona_reactions=[
             PersonaReactionOut(**pr.reaction) for pr in audit.persona_results
