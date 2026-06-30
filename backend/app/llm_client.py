@@ -69,6 +69,13 @@ class LLMClient:
                         raise _RetryableStatus(resp.status_code, resp.text)
                     resp.raise_for_status()
                     data = resp.json()
+                    # OpenRouter bəzən HTTP 200 ilə error payload qaytarır
+                    # (məs. upstream rate-limit). Bunu da retry et.
+                    if "choices" not in data:
+                        code = data.get("error", {}).get("code", 0)
+                        if code == 429 or (isinstance(code, int) and code >= 500):
+                            raise _RetryableStatus(code or 503, str(data))
+                        raise LLMError(f"LLM cavabında 'choices' yoxdur: {str(data)[:200]}")
                     return data["choices"][0]["message"]["content"].strip()
                 except (_RetryableStatus, httpx.TransportError) as exc:
                     last_error = exc
