@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Marketing Mirror</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">◑</span>
+      <div>
+        <h1>Marketing Mirror</h1>
+        <p>Mətnini 5 fərqli namizəd gözüylə gör</p>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="composer">
+      <label for="content">Marketinq mətni</label>
+      <textarea id="content" rows="7"
+        placeholder="Landing page mətni, sosial media postu və ya reklam mətnini bura yapışdır..."></textarea>
+      <div class="composer-row">
+        <select id="content-type" aria-label="Mətn növü">
+          <option value="landing">Landing page</option>
+          <option value="social">Sosial media</option>
+          <option value="ad">Reklam</option>
+          <option value="general" selected>Ümumi</option>
+        </select>
+        <button id="run">Audit et</button>
+      </div>
+      <p id="status" class="status" hidden></p>
+    </section>
+
+    <section id="results" class="results" hidden>
+      <h2>Persona reaksiyaları</h2>
+      <div id="cards" class="cards"></div>
+
+      <h2>Sintez və tövsiyələr</h2>
+      <div id="synthesis" class="synthesis"></div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
